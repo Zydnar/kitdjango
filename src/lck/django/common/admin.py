@@ -39,7 +39,7 @@ from django.db.models.query import QuerySet
 from django.forms.widgets import Select
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.template.loader import render_to_string
-from django.utils.functional import update_wrapper
+from functools import update_wrapper
 from django.utils.encoding import smart_str
 from django.utils.safestring import mark_safe
 from django.utils.text import get_text_list, truncate_words
