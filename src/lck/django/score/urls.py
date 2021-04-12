@@ -26,7 +26,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('lck.django.score.views',
     url(r'^(?P<content_type>\d+)/(?P<object_id>\d+)/$', 'show_score', name='show'),
