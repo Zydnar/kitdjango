@@ -42,7 +42,7 @@ from django.template.loader import render_to_string
 from functools import update_wrapper
 from django.utils.encoding import smart_str
 from django.utils.safestring import mark_safe
-from django.utils.text import get_text_list, truncate_words
+from django.utils.text import get_text_list, Truncator
 from django.utils.translation import ugettext_lazy as _
 try:
     from django.conf.urls import patterns, url
@@ -112,14 +112,14 @@ class ForeignKeySearchInput(ForeignKeyRawIdWidget):
             obj = self.rel.to._default_manager.get(**{key: value})
         except (ValueError, self.rel.to.DoesNotExist):
             return ''
-        return truncate_words(obj, 14)
+        return Truncator(obj).words(14)
 
     def __init__(self, rel, search_fields, admin_site, attrs=None, hide_id=False, instant_lookup=False):
         self.search_fields = search_fields
         self.hide_id = hide_id
         self.instant_lookup = instant_lookup
         super_kwargs = {'rel': rel, 'attrs': attrs}
-        if django.VERSION >= (1,4):
+        if django.VERSION >= (1, 4):
             # XXX: Remove this when 1.3 compatibility is dropped.
             super_kwargs['admin_site'] = admin_site
         super(ForeignKeySearchInput, self).__init__(**super_kwargs)
