@@ -53,7 +53,6 @@ setup (
         'distribute',
         'django>=1.3.1',
         'dj.chain==0.9.2',
-        'dj.choices==0.9.2',
         'null==0.6.1',
         'postmarkup',
         'Pillow>=2.0.0',
@@ -61,7 +60,9 @@ setup (
         #'pylibmc', # we'll switch at one point when libmemcached will be more
                     # prevalent on servers
         ],
-
+    dependency_links = [
+        'git+https://github.com/Zydnar/dj.choices.git',
+    ],
     classifiers = [
         'Development Status :: 4 - Beta',
         'Framework :: Django',
