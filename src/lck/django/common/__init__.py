@@ -36,7 +36,7 @@ from django.conf import settings
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader, RequestContext
-from django.utils import simplejson
+import json
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from dj.chain import chain as lazy_chain # compatibility with lck.django < 0.8
@@ -106,7 +106,7 @@ def render_json(obj):
     Dumps the object in the `obj` param to a JSON string and returns it
     via HTTP using the application/json mimetype."""
 
-    return HttpResponse(simplejson.dumps(obj),
+    return HttpResponse(json.dumps(obj),
                         mimetype="application/json")
 
 
