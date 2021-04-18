@@ -231,7 +231,9 @@ class Backlink(TimeTrackable, WithConcurrentGetOrCreate):
         if fast_mode:
             bl, created = cls.objects.get_or_create(hash=hash)
         else:
-            bl, created = super(Backlink, cls).concurrent_get_or_create(hash=hash)
+            bl, created = super(Backlink, cls).concurrent_get_or_create(
+                defaults={'site': site, 'url': url, 'referrer': referrer}, hash=hash
+            )
         if created:
             bl.site = site
             bl.url = url
