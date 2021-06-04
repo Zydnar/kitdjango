@@ -100,7 +100,7 @@ def update_activity(user_id, address, agent, _now_dt):
     if user_id:
         profile = User.objects.get(pk=user_id)
         if not model_is_user(ACTIVITYLOG_PROFILE_MODEL):
-            profile = profile.get_profile()
+            profile = profile.profile
         last_active = profile.last_active
         if not last_active or CURRENTLY_ONLINE_INTERVAL <= 3 * (_now_dt -
                 last_active).seconds:
