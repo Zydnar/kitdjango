@@ -73,12 +73,14 @@ class TotalScore(db.Model):
         """Returns a list of stats computed using the specified `cases` which
         are a sequence of filtering arguments for the TotalScore vote_set for
         the specified model (and optionally: instance)."""
+        stats = []
         if not ct:
+            if not model:
+                return stats
             ct = ContentType.objects.get_for_model(model)
         kwargs = {'total_score__content_type': ct}
         if instance:
             kwargs['total_score__object_id'] = instance.id
-        stats = []
         for case in cases:
             case.update(kwargs)
             case_sum = Vote.objects.filter(**case).count()
@@ -165,8 +167,12 @@ class Vote(TimeTrackable):
 
 
 def dispatch_total_score_changed(total_score):
-    total_score_changed.send_robust(sender=TotalScore,
+    try:
+        total_score_changed.send_robust(sender=TotalScore,
         content_object=total_score.content_object, value=total_score.value)
+    except:
+        print('Tried to delete:')
+        print(total_score)
 
 
 def vote_pre_save(sender, instance, **kwargs):
@@ -193,5 +199,9 @@ def vote_post_delete(sender, instance, **kwargs):
     object."""
     instance.total_score.value -= instance.value
     instance.total_score.save()
-    dispatch_total_score_changed(instance.total_score)
+    try:
+        dispatch_total_score_changed(instance.total_score)
+    except:
+        print('Tried to delete:')
+        print(instance.total_score)
 db.signals.post_delete.connect(vote_post_delete, Vote)
