@@ -26,6 +26,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import json
 import operator
 
 import django
@@ -37,9 +38,11 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models as db
 from django.db.models.query import QuerySet
 from django.forms.widgets import Select
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, HttpResponseServerError
 from django.template.loader import render_to_string
 from functools import update_wrapper
+
+from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.encoding import smart_str
 from django.utils.safestring import mark_safe
 from django.utils.text import get_text_list, Truncator
@@ -361,7 +364,7 @@ class ModelAdmin(ForeignKeyAutocompleteModelMixin,
         return getattr(self, command)(request, obj) \
             or HttpResponseRedirect(request.META['HTTP_REFERER'])
 
-    def change_view(self, request, object_id, extra_context=None):
+    def change_view(self, request, object_id, extra_context=None, **kwargs):
         if extra_context is None:
             extra_context = {}
         extra_context['buttons'] = [(b.func_name, b.short_description)

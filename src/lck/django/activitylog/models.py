@@ -36,6 +36,7 @@ import socket
 import zlib
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.db import models as db
 from django.utils.translation import ugettext_lazy as _
@@ -259,6 +260,7 @@ class M2M(TimeTrackable, WithConcurrentGetOrCreate):
 
 class ProfileIP(M2M):
     ip = db.ForeignKey(IP, verbose_name=_("IP address"))
+    user = db.ForeignKey(User, verbose_name=_("user"))
 
     class Meta:
         unique_together = ('ip', 'profile')
@@ -279,6 +281,7 @@ class ProfileIP(M2M):
 
 class ProfileUserAgent(M2M):
     agent = db.ForeignKey(UserAgent, verbose_name=_("user agent"))
+    user = db.ForeignKey(User, verbose_name=_("user"))
 
     class Meta:
         unique_together = ('agent', 'profile')
